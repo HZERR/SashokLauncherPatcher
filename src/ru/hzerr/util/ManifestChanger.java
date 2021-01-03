@@ -26,5 +26,6 @@ public class ManifestChanger {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(MANIFEST))) {
             bufferedWriter.write(attributes.toString());
         }
+        System.out.println("Success!");
     }
 }

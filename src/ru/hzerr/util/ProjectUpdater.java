@@ -15,4 +15,15 @@ public class ProjectUpdater {
         System.out.println("Update command: " + command);
         IOHelper.startNewProcessBuilderWithCmdExe(command);
     }
+
+    private static class LauncherUpdater {
+
+        public static void main(String[] args) throws IOException, InterruptedException { update(); }
+
+        public static void update() throws IOException, InterruptedException {
+            String command = "cd " + IOHelper.FOLDER_FULL_NAME + " & jar uf " + IOHelper.PROJECT_TEST_NAME + " launcher";
+            System.out.println("Update command: " + command);
+            IOHelper.startNewProcessBuilderWithCmdExe(command);
+        }
+    }
 }

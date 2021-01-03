@@ -5,15 +5,15 @@ import ru.hzerr.ByteCodeBuilderFactory;
 import ru.hzerr.Deobfuscator;
 import ru.hzerr.SashokClass;
 
-public class Launcher extends SashokClass {
+public class IOHelper extends SashokClass {
 
-    private static final String className = Deobfuscator.LAUNCHER.getClassName();
+    private static final String className = Deobfuscator.IO_HELPER.getClassName();
 
     @Override
     public ByteCodeBuilder transform() {
         return ByteCodeBuilderFactory.createMethodByteCodeBuilder(className)
                 .filterByNames("getResourceURL")
-                .addCode("return launcher.KeepErjERryKEt.getResourceURL(\"runtime/\" + $1);")
+                .addCode("return " + Deobfuscator.LAUNCHER.getClassName() + ".class.getResource('/' + $1);")
                 .insertBody();
     }
 }

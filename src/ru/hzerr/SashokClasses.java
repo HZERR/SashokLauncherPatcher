@@ -1,13 +1,17 @@
 package ru.hzerr;
 
-import ru.hzerr.classes.Launcher;
-import ru.hzerr.classes.SecurityHelper;
+import ru.hzerr.classes.*;
+import ru.hzerr.classes.IOHelper;
 
 import java.util.Arrays;
 
 public enum SashokClasses {
+
+    CLIENT_LAUNCHER(new ClientLauncher()),
+    SECURITY_HELPER(new SecurityHelper()),
+    IO_HELPER(new IOHelper()),
     LAUNCHER(new Launcher()),
-    SECURITY_HELPER(new SecurityHelper());
+    LOG_HELPER(new LogHelper());
 
     private final SashokClass sashokClass;
 

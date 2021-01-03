@@ -5,15 +5,14 @@ import ru.hzerr.ByteCodeBuilderFactory;
 import ru.hzerr.Deobfuscator;
 import ru.hzerr.SashokClass;
 
-public class Launcher extends SashokClass {
+public class ClientLauncher extends SashokClass {
 
-    private static final String className = Deobfuscator.LAUNCHER.getClassName();
+    private static final String className = Deobfuscator.CLIENT_LAUNCHER.getClassName();
 
     @Override
     public ByteCodeBuilder transform() {
         return ByteCodeBuilderFactory.createMethodByteCodeBuilder(className)
-                .filterByNames("getResourceURL")
-                .addCode("return launcher.KeepErjERryKEt.getResourceURL(\"runtime/\" + $1);")
-                .insertBody();
+                .filterByNames("verifyHDir")
+                .setEmptyBody();
     }
 }

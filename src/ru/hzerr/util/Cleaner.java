@@ -21,6 +21,7 @@ public class Cleaner {
                 } else FileUtils.forceDelete(file);
             }
         }
+        System.out.println("Success!");
     }
 
     private static class TestProjectCleaner {
@@ -31,6 +32,7 @@ public class Cleaner {
 
         public static void cleanup() throws IOException {
             FileUtils.forceDeleteOnExit(new File(IOHelper.FOLDER_FULL_NAME + File.separator + IOHelper.PROJECT_TEST_NAME));
+            System.out.println("Success!");
         }
     }
 }
