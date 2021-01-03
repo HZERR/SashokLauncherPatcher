@@ -4,6 +4,11 @@ Patcher of launchers that are based on the Sashok274 launcher.
 
 ## WARNING!!! Работает только под Windows!!!
 
+### Dependencies
+   * commons-io-2.8.0.jar
+   * hbcbuilder-v1.0.jar
+   * javassist-3.27.0-GA.jar
+
 ### Начало:
 1. Необходимо создать пустую папку, в которой будет происходить вся "магия"
 2. Скопировать в созданную папку jar-файл проекта, который необходимо пропатчить
