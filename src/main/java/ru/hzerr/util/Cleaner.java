@@ -24,15 +24,4 @@ public class Cleaner {
         System.out.println("Success!");
     }
 
-    private static class TestProjectCleaner {
-
-        public static void main(String[] args) throws IOException {
-            cleanup();
-        }
-
-        public static void cleanup() throws IOException {
-            FileUtils.forceDeleteOnExit(new File(IOHelper.FOLDER_FULL_NAME + File.separator + IOHelper.PROJECT_TEST_NAME));
-            System.out.println("Success!");
-        }
-    }
 }

@@ -2,3 +2,5 @@
 /out/
 .idea
 SashokLauncherPatcher.iml
+build
+.gradle

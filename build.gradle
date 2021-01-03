@@ -1,0 +1,123 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.hzerr'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+}
+
+task Unpack(type: JavaExec) {
+    group = "modifications"
+    description = "Unpack the original jar file"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.Unpack"
+}
+
+task Start(type: JavaExec) {
+    group = "modifications"
+    description = "Launches the assembled jar file"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.Starter"
+}
+
+task Build(type: JavaExec) {
+    group = "modifications"
+    description = "Assembles the project"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.Builder"
+}
+
+task Transform(type: JavaExec) {
+    group = "modifications"
+    description = "Changes the bytecode of the classes"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.Transformator"
+}
+
+task ChangeManifest(type: JavaExec) {
+    group = "modifications"
+    description = "Modifies the META-INF folder"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.ManifestChanger"
+}
+
+task UpdateProject(type: JavaExec) {
+    group = "modifications"
+    description = "Updates the specified folders/files"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.ProjectUpdater"
+    args("com", "launcher", "runtime", "buildnumber", "config.bin")
+}
+
+task UpdateLauncherFolder(type: JavaExec) {
+    group = "modifications"
+    description = "Updates the contents of the 'launcher' folder in the assembled jar file"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.ProjectUpdater"
+    args("launcher")
+}
+
+task UpdateRuntimeFolder(type: JavaExec) {
+    group = "modifications"
+    description = "Updates the contents of the 'runtime' folder in the built jar file"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.ProjectUpdater"
+    args("runtime")
+}
+
+task Clean(type: JavaExec) {
+    group = "modifications"
+    description = "Clears all the contents of the folder except the original jar file"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.Cleaner"
+}
+
+task CleanTestProject(type: JavaExec) {
+    group = "modifications"
+    description = "Deletes the built jar file"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.TestProjectCleaner"
+}
+
+task AddJFoenixLibrary(type: JavaExec) {
+    group = "modifications"
+    description = "Adds the JFoenix-8.0.10 library to the assembled jar file"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.JFoenixAppender"
+}
+
+task UpdateRuntimeFolderAndRun {
+    group = "group modifications"
+    dependsOn ordered(":UpdateRuntimeFolder", ":Start")
+}
+
+task UpdateLauncherFolderAndRun {
+    group = "group modifications"
+    dependsOn ordered(":UpdateLauncherFolder", ":Start")
+}
+
+task UnpackChangeAllBuildUpdateAndRun {
+    group = "group modifications"
+    dependsOn ordered(":Unpack", ":Transform", ":ChangeManifest", ":Build", ":UpdateProject", ":Start")
+}
+
+task Rebuild {
+    group = "group modifications"
+    description = "Clears the old built project, builds a new one, updates it and runs it"
+    dependsOn ordered(":CleanTestProject", ":Build", ":UpdateProject", ":Start")
+}
+
+def ordered(String... dependencyPaths) {
+    def dependencies = dependencyPaths.collect { tasks.getByPath(it) }
+    for (int i = 0; i < dependencies.size() - 1; i++) {
+        dependencies[i + 1].mustRunAfter(dependencies[i])
+    }
+    return dependencies
+}
