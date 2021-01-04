@@ -3,6 +3,7 @@ package ru.hzerr.util;
 import javassist.ClassPool;
 import javassist.LoaderClassPath;
 import ru.hzerr.GradleOptions;
+import ru.hzerr.HLogger;
 import ru.hzerr.Helper;
 import ru.hzerr.SashokClasses;
 
@@ -21,5 +22,6 @@ public class Transformator {
         SashokClasses.doTransform(options);
         ClassPool.getDefault().removeClassPath(loaderClassPath);
         classLoader.close();
+        HLogger.success("The bytecode of the classes has been successfully modified");
     }
 }

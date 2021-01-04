@@ -1,6 +1,7 @@
 package ru.hzerr.util;
 
 import ru.hzerr.GradleOptions;
+import ru.hzerr.HLogger;
 import ru.hzerr.Helper;
 
 import java.io.File;
@@ -23,7 +24,8 @@ public class Builder {
         }
 
         String command = "cd " + options.folderFullName + " & jar cvfm " + options.projectTestName + " META-INF\\MANIFEST.MF -C " + namesBuilder.toString();
-        System.out.println("Build command: " + command);
-        Helper.startNewProcessBuilderWithCmdExe(command);
+        HLogger.info("Build command: " + command);
+        if (Helper.startNewProcessBuilderWithCmdExe(command)) HLogger.success("The assembly was successful");
+        else HLogger.warning("The build ended with an error");
     }
 }

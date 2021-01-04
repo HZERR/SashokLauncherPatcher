@@ -2,6 +2,7 @@ package ru.hzerr.util;
 
 import org.apache.commons.io.FileUtils;
 import ru.hzerr.GradleOptions;
+import ru.hzerr.HLogger;
 import ru.hzerr.Helper;
 
 import java.io.File;
@@ -20,6 +21,7 @@ public class Cleaner {
                 } else FileUtils.forceDelete(file);
             }
         }
-        System.out.println("The cleaning was successful");
+
+        HLogger.success("The cleaning was successful");
     }
 }

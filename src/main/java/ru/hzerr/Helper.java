@@ -6,11 +6,9 @@ import java.io.IOException;
 
 public class Helper {
 
-    public static int startNewProcessBuilderWithCmdExe(String command) throws IOException, InterruptedException {
+    public static boolean startNewProcessBuilderWithCmdExe(String command) throws IOException, InterruptedException {
         ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
-        int exitCode;
-        System.out.println("Exit code: " + (exitCode = builder.inheritIO().start().waitFor()));
-        return exitCode;
+        return builder.inheritIO().start().waitFor() == 0;
     }
 
     public static GradleOptions parse(String... args) {

@@ -12,6 +12,7 @@ repositories {
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
     compile 'com.github.pcj:google-options:1.0.0'
+    compile group: 'org.fusesource.jansi', name: 'jansi', version: '2.1.1'
 }
 
 task Unpack(type: JavaExec) {

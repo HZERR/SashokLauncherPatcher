@@ -1,6 +1,7 @@
 package ru.hzerr.util;
 
 import ru.hzerr.GradleOptions;
+import ru.hzerr.HLogger;
 import ru.hzerr.Helper;
 
 import java.io.*;
@@ -27,5 +28,7 @@ public class ManifestChanger {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(MANIFEST))) {
             bufferedWriter.write(attributes.toString());
         }
+
+        HLogger.success("The META-INF folder has been successfully patched");
     }
 }
