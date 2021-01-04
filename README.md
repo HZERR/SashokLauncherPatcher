@@ -4,28 +4,20 @@ Patcher of launchers that are based on the Sashok274 launcher.
 
 ## WARNING!!! Работает только под Windows!!!
 
-### Dependencies
-   * commons-io-2.8.0.jar
-   * hbcbuilder-v1.0.jar
-   * javassist-3.27.0-GA.jar
-
 ### Начало:
 1. Необходимо создать пустую папку, в которой будет происходить вся "магия"
 2. Скопировать в созданную папку jar-файл проекта, который необходимо пропатчить
-3. Открыть в IDE класс ru.hzerr.Helper и поменять пути FOLDER_FULL_NAME и PROJECT_FULL_NAME, а также изменить тестовое название jar-файла (PROJECT_TEST_NAME)
-4. Открыть класс ru.hzerr.Deobfuscator и изменить названия классов на те, которые соответствуют взламываемому jar-файлу
+3. Открыть gradle.properties и поменять пути folder.full.name и project.full.name, а также изменить тестовое название jar-файла (project.test.name)
+4. Изменить названия классов на те, которые соответствуют взламываемому jar-файлу
 
-## WARNING!!! Желательно запускать у каждого класса метод main отдельно
 ### Патчинг
-1. Запустить ru.hzerr.util.Unpack.main()
-2. Запустить ru.hzerr.util.ManifestChanger.main()
-3. Запустить ru.hzerr.util.Tranformator.main()
-4. Запустить ru.hzerr.util.Builder.main() (см. вывод в консоль!)
+1. Запустить в build.gradle Unpack task
+2. Запустить ChangeManifest task
+3. Запустить Transform task
+4. Запустить Build task (см. вывод в консоль!)
 5. Если какие-то папки не были добавлены в jar-файл, то 
-    * Открываем ru.hzerr.util.ProjectUpdater
-    * Меняем CHANGE_FILE_NAMES (например, CHANGE_FILE_NAMES = "com launcher buildnumber config.bin")
-    * Запускаем ru.hzerr.util.ProjectUpdater.main()
-6. Запустить ru.hzerr.util.Starter.main()
+    * Запускаем UpdateProject task
+6. Запустить Start task
 
 <b> Готово </b>
 
@@ -35,9 +27,27 @@ Patcher of launchers that are based on the Sashok274 launcher.
 3. Transformator - изменяет байт-код классов. Перед использованием желательно распаковать проект
 4. Builder - собирает проект. Перед использованием необходимо распаковать проект
 5. ProjectUpdater - обновляет файлы, которые не попали в проект при его сборке. Перед использованием необходимо распаковать и собрать проект
-6. ProjectUpdater.LauncherUpdater - обновляет содержимое папки launcher в собранном jar-файле. Перед использованием необходимо распаковать и собрать проект
 6. Starter - запускает собранный jar-файл. Перед использованием необходимо собрать проект
 7. Cleaner - очищает все содержимое папки кроме оригинального jar-файла
 8. Cleaner.TestProjectCleaner - удаляет построенный jar-файл
-9. RuntimeReplacer - обновляет содержимое папки runtime в собранном jar-файле. Перед использованием необходимо распаковать и собрать проект
-10. JFoenixAppender - добавляет в собранный jar-файл библиотеку JFoenix-8.0.10. Перед использованием необходимо собрать проект
+9. JFoenixAppender - добавляет в собранный jar-файл библиотеку JFoenix-8.0.10. Перед использованием необходимо собрать проект
+
+### Tasks
+
+| Name                             | Group               | Description                                                                               |
+| -------------------------------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| Start                            | modifications       | Launches the assembled jar file                                                           |
+| Unpack                           | modifications       | Unpack the original jar file                                                              |
+| Build                            | modifications       | Assembles the project                                                                     |
+| Transform                        | modifications       | Changes the bytecode of the classes                                                       |
+| ChangeManifest                   | modifications       | Modifies the META-INF folder                                                              |
+| UpdateProject                    | modifications       | Updates the specified folders/files                                                       |
+| UpdateLauncherFolder             | modifications       | Updates the contents of the 'launcher' folder in the assembled jar file                   |
+| UpdateRuntimeFolder              | modifications       | Updates the contents of the 'runtime' folder in the built jar file                        |
+| Clean                            | modifications       | Clears all the contents of the folder except the original jar file                        |
+| CleanTestProject                 | modifications       | Deletes the built jar file                                                                |
+| AddJFoenixLibrary                | modifications       | Adds the JFoenix-8.0.10 library to the assembled jar file                                 |
+| UpdateRuntimeFolderAndRun        | group modifications | Starts tasks UpdateRuntimeFolder and Start one by one                                     |
+| UpdateLauncherFolderAndRun       | group modifications | Starts tasks UpdateLauncherFolder and Start one by one                                    |
+| UnpackChangeAllBuildUpdateAndRun | group modifications | Starts tasks Unpack, Transform, ChangeManifest, Build, UpdateProject and Start one by one |
+| Rebuild                          | group modifications | Starts tasks CleanTestProject, Build, UpdateProject and Start one by one                  |
