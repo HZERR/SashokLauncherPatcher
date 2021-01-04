@@ -1,15 +1,16 @@
 package ru.hzerr.util;
 
-import ru.hzerr.IOHelper;
+import ru.hzerr.GradleOptions;
+import ru.hzerr.Helper;
 
 import java.io.*;
 
 public class ManifestChanger {
 
-    public static void main(String[] args) throws IOException { change(); }
+    public static void main(String[] args) throws IOException { change(Helper.parse(args)); }
 
-    public static void change() throws IOException {
-        File META_INF = new File(IOHelper.FOLDER_FULL_NAME + File.separator + "META-INF");
+    public static void change(GradleOptions options) throws IOException {
+        File META_INF = new File(options.folderFullName + File.separator + "META-INF");
         File MANIFEST = new File(META_INF.getAbsolutePath() + File.separator + "MANIFEST.MF");
         File RSA_FILE = new File(META_INF.getAbsolutePath() + File.separator + "LAUNCHER.RSA");
         File SF_FILE  = new File(META_INF.getAbsolutePath() + File.separator + "LAUNCHER.SF");

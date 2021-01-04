@@ -1,27 +1,29 @@
 package ru.hzerr.util;
 
-import ru.hzerr.IOHelper;
+import ru.hzerr.GradleOptions;
+import ru.hzerr.Helper;
 
 import java.io.File;
 import java.io.IOException;
 
 public class Builder {
 
-    public static void main(String[] args) throws IOException, InterruptedException { build(); }
+    public static void main(String[] args) throws IOException, InterruptedException { build(Helper.parse(args)); }
 
-    public static void build() throws IOException, InterruptedException {
-        File[] files = IOHelper.FOLDER_FILE.listFiles();
+    public static void build(GradleOptions options) throws IOException, InterruptedException {
+        File[] files = options.getFolderFile().listFiles();
         StringBuilder namesBuilder = new StringBuilder();
         if (files != null) {
             for (File file : files) {
-                if (!file.getName().equals(IOHelper.PROJECT_NAME) && !file.getName().equals(IOHelper.PROJECT_TEST_NAME)) {
+                if (!file.getName().equals(options.getProjectName()) && !file.getName().equals(options.projectTestName)) {
                     namesBuilder.append(file.getName()).append(' ');
                 }
             }
             namesBuilder.setLength(namesBuilder.length() - 1);
         }
-        String command = "cd " + IOHelper.FOLDER_FULL_NAME + " & jar cvfm " + IOHelper.PROJECT_TEST_NAME + " META-INF\\MANIFEST.MF -C " + namesBuilder.toString();
+
+        String command = "cd " + options.folderFullName + " & jar cvfm " + options.projectTestName + " META-INF\\MANIFEST.MF -C " + namesBuilder.toString();
         System.out.println("Build command: " + command);
-        IOHelper.startNewProcessBuilderWithCmdExe(command);
+        Helper.startNewProcessBuilderWithCmdExe(command);
     }
 }

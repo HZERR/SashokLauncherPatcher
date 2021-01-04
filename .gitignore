@@ -3,4 +3,4 @@
 .idea
 SashokLauncherPatcher.iml
 build
-.gradle
+.gradle/

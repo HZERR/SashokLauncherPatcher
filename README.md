@@ -12,7 +12,7 @@ Patcher of launchers that are based on the Sashok274 launcher.
 ### Начало:
 1. Необходимо создать пустую папку, в которой будет происходить вся "магия"
 2. Скопировать в созданную папку jar-файл проекта, который необходимо пропатчить
-3. Открыть в IDE класс ru.hzerr.IOHelper и поменять пути FOLDER_FULL_NAME и PROJECT_FULL_NAME, а также изменить тестовое название jar-файла (PROJECT_TEST_NAME)
+3. Открыть в IDE класс ru.hzerr.Helper и поменять пути FOLDER_FULL_NAME и PROJECT_FULL_NAME, а также изменить тестовое название jar-файла (PROJECT_TEST_NAME)
 4. Открыть класс ru.hzerr.Deobfuscator и изменить названия классов на те, которые соответствуют взламываемому jar-файлу
 
 ## WARNING!!! Желательно запускать у каждого класса метод main отдельно

@@ -1,17 +1,12 @@
 package ru.hzerr.classes;
 
-import ru.hzerr.ByteCodeBuilder;
-import ru.hzerr.ByteCodeBuilderFactory;
-import ru.hzerr.Deobfuscator;
-import ru.hzerr.SashokClass;
+import ru.hzerr.*;
 
 public class ClientLauncher extends SashokClass {
 
-    private static final String className = Deobfuscator.CLIENT_LAUNCHER.getClassName();
-
     @Override
-    public ByteCodeBuilder transform() {
-        return ByteCodeBuilderFactory.createMethodByteCodeBuilder(className)
+    public ByteCodeBuilder transform(GradleOptions options) {
+        return ByteCodeBuilderFactory.createMethodByteCodeBuilder(options.clientLauncherClassName)
                 .filterByNames("verifyHDir")
                 .setEmptyBody();
     }

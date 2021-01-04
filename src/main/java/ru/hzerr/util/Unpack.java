@@ -1,16 +1,17 @@
 package ru.hzerr.util;
 
-import ru.hzerr.IOHelper;
+import ru.hzerr.GradleOptions;
+import ru.hzerr.Helper;
 
 import java.io.IOException;
 
 public class Unpack {
 
-    public static void main(String[] args) throws IOException, InterruptedException { unpack(); }
+    public static void main(String[] args) throws IOException, InterruptedException { unpack(Helper.parse(args)); }
 
-    public static void unpack() throws IOException, InterruptedException {
-        String command = "cd " + IOHelper.FOLDER_FULL_NAME + " & jar xf " + IOHelper.PROJECT_NAME;
+    public static void unpack(GradleOptions options) throws IOException, InterruptedException {
+        String command = "cd " + options.folderFullName + " & jar xf " + options.getProjectName();
         System.out.println("Unpack command: " + command);
-        IOHelper.startNewProcessBuilderWithCmdExe(command);
+        Helper.startNewProcessBuilderWithCmdExe(command);
     }
 }

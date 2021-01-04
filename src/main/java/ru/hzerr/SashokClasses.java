@@ -19,7 +19,7 @@ public enum SashokClasses {
         this.sashokClass = sashokClass;
     }
 
-    public static void doTransform() {
-        Arrays.stream(values()).forEach(sashokClass -> sashokClass.sashokClass.doTransform());
+    public static void doTransform(GradleOptions options) {
+        Arrays.stream(values()).forEach(sashokClass -> sashokClass.sashokClass.doTransform(options));
     }
 }

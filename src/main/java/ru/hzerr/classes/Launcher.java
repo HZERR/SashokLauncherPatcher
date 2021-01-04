@@ -1,19 +1,14 @@
 package ru.hzerr.classes;
 
-import ru.hzerr.ByteCodeBuilder;
-import ru.hzerr.ByteCodeBuilderFactory;
-import ru.hzerr.Deobfuscator;
-import ru.hzerr.SashokClass;
+import ru.hzerr.*;
 
 public class Launcher extends SashokClass {
 
-    private static final String className = Deobfuscator.LAUNCHER.getClassName();
-
     @Override
-    public ByteCodeBuilder transform() {
-        return ByteCodeBuilderFactory.createMethodByteCodeBuilder(className)
+    public ByteCodeBuilder transform(GradleOptions options) {
+        return ByteCodeBuilderFactory.createMethodByteCodeBuilder(options.launcherClassName)
                 .filterByNames("getResourceURL")
-                .addCode("return launcher.KeepErjERryKEt.getResourceURL(\"runtime/\" + $1);")
+                .addCode("return " + options.ioHelperClassName + ".getResourceURL(\"runtime/\" + $1);")
                 .insertBody();
     }
 }

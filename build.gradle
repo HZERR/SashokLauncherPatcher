@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
+    compile 'com.github.pcj:google-options:1.0.0'
 }
 
 task Unpack(type: JavaExec) {
@@ -18,6 +19,8 @@ task Unpack(type: JavaExec) {
     description = "Unpack the original jar file"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.Unpack"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.full.name=" + findProperty("project.full.name"))
 }
 
 task Start(type: JavaExec) {
@@ -25,6 +28,8 @@ task Start(type: JavaExec) {
     description = "Launches the assembled jar file"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.Starter"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.test.name=" + findProperty("project.test.name"))
 }
 
 task Build(type: JavaExec) {
@@ -32,6 +37,9 @@ task Build(type: JavaExec) {
     description = "Assembles the project"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.Builder"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.full.name=" + findProperty("project.full.name"),
+            "--project.test.name=" + findProperty("project.test.name"))
 }
 
 task Transform(type: JavaExec) {
@@ -39,6 +47,16 @@ task Transform(type: JavaExec) {
     description = "Changes the bytecode of the classes"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.Transformator"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.full.name=" + findProperty("project.full.name"),
+            "--security.helper.class.name=" + findProperty("security.helper.class.name"),
+            "--client.launcher.class.name=" + findProperty("client.launcher.class.name"),
+            "--io.helper.class.name=" + findProperty("io.helper.class.name"),
+            "--launcher.class.name=" + findProperty("launcher.class.name"),
+            "--log.helper.class.name=" + findProperty("log.helper.class.name"),
+            "--debug.enabled=" + findProperty("debug.enabled"),
+            "--launcher.name=" + findProperty("launcher.name"),
+            "--launcher.version=" + findProperty("launcher.version"))
 }
 
 task ChangeManifest(type: JavaExec) {
@@ -46,6 +64,7 @@ task ChangeManifest(type: JavaExec) {
     description = "Modifies the META-INF folder"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.ManifestChanger"
+    args("--folder.full.name=" + findProperty("folder.full.name"))
 }
 
 task UpdateProject(type: JavaExec) {
@@ -53,7 +72,9 @@ task UpdateProject(type: JavaExec) {
     description = "Updates the specified folders/files"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.ProjectUpdater"
-    args("com", "launcher", "runtime", "buildnumber", "config.bin")
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.test.name=" + findProperty("project.test.name"),
+            "--files.to.be.updated=" + findProperty("files.to.be.updated"))
 }
 
 task UpdateLauncherFolder(type: JavaExec) {
@@ -61,7 +82,9 @@ task UpdateLauncherFolder(type: JavaExec) {
     description = "Updates the contents of the 'launcher' folder in the assembled jar file"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.ProjectUpdater"
-    args("launcher")
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.test.name=" + findProperty("project.test.name"),
+            "--files.to.be.updated=launcher")
 }
 
 task UpdateRuntimeFolder(type: JavaExec) {
@@ -69,7 +92,9 @@ task UpdateRuntimeFolder(type: JavaExec) {
     description = "Updates the contents of the 'runtime' folder in the built jar file"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.ProjectUpdater"
-    args("runtime")
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.test.name=" + findProperty("project.test.name"),
+            "--files.to.be.updated=runtime")
 }
 
 task Clean(type: JavaExec) {
@@ -77,6 +102,8 @@ task Clean(type: JavaExec) {
     description = "Clears all the contents of the folder except the original jar file"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.Cleaner"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.full.name=" + findProperty("project.full.name"))
 }
 
 task CleanTestProject(type: JavaExec) {
@@ -84,6 +111,8 @@ task CleanTestProject(type: JavaExec) {
     description = "Deletes the built jar file"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.TestProjectCleaner"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.test.name=" + findProperty("project.test.name"))
 }
 
 task AddJFoenixLibrary(type: JavaExec) {
@@ -91,6 +120,8 @@ task AddJFoenixLibrary(type: JavaExec) {
     description = "Adds the JFoenix-8.0.10 library to the assembled jar file"
     classpath = sourceSets.main.runtimeClasspath
     main = "ru.hzerr.util.JFoenixAppender"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.test.name=" + findProperty("project.test.name"))
 }
 
 task UpdateRuntimeFolderAndRun {

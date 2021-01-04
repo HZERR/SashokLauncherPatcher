@@ -1,9 +1,10 @@
 package ru.hzerr;
 
 public abstract class SashokClass {
+
     public SashokClass() {}
 
-    public abstract ByteCodeBuilder transform();
+    public abstract ByteCodeBuilder transform(GradleOptions options);
 
-    public void doTransform() { transform().writeFile(IOHelper.FOLDER_FULL_NAME); }
+    public void doTransform(GradleOptions options) { transform(options).writeFile(options.folderFullName); }
 }
