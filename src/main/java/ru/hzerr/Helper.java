@@ -1,6 +1,7 @@
 package ru.hzerr;
 
 import com.google.devtools.common.options.OptionsParser;
+import javafx.scene.control.Spinner;
 
 import java.io.IOException;
 

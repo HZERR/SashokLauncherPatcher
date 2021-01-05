@@ -146,6 +146,12 @@ task Rebuild {
     dependsOn ordered(":CleanTestProject", ":Build", ":UpdateProject", ":Start")
 }
 
+task TransformAndRun {
+    group = "group modifications"
+    description = "Changes the bytecode of the classes and runs the jar file with the updated \"launcher\" folder"
+    dependsOn ordered(":Transform", ":UpdateLauncherFolder", ":Start")
+}
+
 def ordered(String... dependencyPaths) {
     def dependencies = dependencyPaths.collect { tasks.getByPath(it) }
     for (int i = 0; i < dependencies.size() - 1; i++) {
