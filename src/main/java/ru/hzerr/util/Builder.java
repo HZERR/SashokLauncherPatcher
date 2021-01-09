@@ -1,31 +1,33 @@
 package ru.hzerr.util;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import ru.hzerr.GradleOptions;
 import ru.hzerr.HLogger;
-import ru.hzerr.Helper;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class Builder {
 
-    public static void main(String[] args) throws IOException, InterruptedException { build(Helper.parse(args)); }
+    public static void main(String[] args) {
+        build(GradleOptions.getGradleOptions(args));
+    }
 
-    public static void build(GradleOptions options) throws IOException, InterruptedException {
-        File[] files = options.getFolderFile().listFiles();
-        StringBuilder namesBuilder = new StringBuilder();
-        if (files != null) {
+    public static void build(GradleOptions options) {
+        List<File> files = new ArrayList<>(Arrays.asList(Objects.requireNonNull(options.getFolderFile().listFiles())));
+        files.removeIf(file -> file.getName().equals(options.getProjectName()) || file.getName().equals(options.projectTestName));
+
+        ZipFile project = new ZipFile(new File(options.getFolderFile(), options.projectTestName));
+        try {
             for (File file : files) {
-                if (!file.getName().equals(options.getProjectName()) && !file.getName().equals(options.projectTestName)) {
-                    namesBuilder.append(file.getName()).append(' ');
-                }
+                if (file.isDirectory()) project.addFolder(file);
+                else project.addFile(file);
             }
-            namesBuilder.setLength(namesBuilder.length() - 1);
-        }
-
-        String command = "cd " + options.folderFullName + " & jar cvfm " + options.projectTestName + " META-INF\\MANIFEST.MF -C " + namesBuilder.toString();
-        HLogger.info("Build command: " + command);
-        if (Helper.startNewProcessBuilderWithCmdExe(command)) HLogger.success("The assembly was successful");
-        else HLogger.warning("The build ended with an error");
+            HLogger.success("The assembly was successful");
+        } catch (ZipException e) { HLogger.error("The build ended with an error", e); }
     }
 }

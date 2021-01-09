@@ -2,8 +2,10 @@ package ru.hzerr;
 
 import com.google.devtools.common.options.Option;
 import com.google.devtools.common.options.OptionsBase;
+import com.google.devtools.common.options.OptionsParser;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -35,8 +37,8 @@ public class GradleOptions extends OptionsBase {
     @Option(name = "log.helper.class.name", defaultValue = "")
     public String logHelperClassName;
 
-    @Option(name = "debug.enabled", defaultValue = "false")
-    public boolean isDebugEnabled;
+    @Option(name = "debug.force.enabled", defaultValue = "false")
+    public boolean isDebugForceEnabled;
 
     @Option(name = "launcher.name", defaultValue = "")
     public String launcherName;
@@ -44,55 +46,104 @@ public class GradleOptions extends OptionsBase {
     @Option(name = "launcher.version", defaultValue = "")
     public String launcherVersion;
 
+    @Option(name = "launcher.build", defaultValue = "")
+    public String launcherBuild;
+
     @Option(name = "files.to.be.updated", allowMultiple = true, defaultValue = "")
     public List<String> filesToBeUpdated;
 
+    private String normalizeFolderFullName;
+    private String normalizeProjectFullName;
+    private String normalizeProjectTestFullName;
+
     private Path pathToFolder;
     private Path pathToProject;
+    private Path pathToProjectTest;
 
     private File folderFile;
     private File projectFile;
+    private File projectTestFile;
 
     // require "folderFullName"
     public File getFolderFile() {
         if (folderFile != null) return folderFile;
-        if (!folderFullName.isEmpty()) return folderFile = new File(folderFullName);
-        return null;
+        return folderFile = new File(getFolderFullName());
     }
 
     // require "projectFullName"
     public File getProjectFile() {
         if (projectFile != null) return projectFile;
-        if (!projectFullName.isEmpty()) return projectFile = new File(projectFullName);
-        return null;
+        return projectFile = new File(getProjectFullName());
+    }
+
+    // require projectTestName, folderFullName
+    public File getProjectTestFile() {
+        if (projectTestFile != null) return projectTestFile;
+        return projectTestFile = new File(getFolderFile(), getProjectTestName());
     }
 
     // require "folderFullName"
     public Path getFolderPath() {
         if (pathToFolder != null) return pathToFolder;
-        if (!folderFullName.isEmpty()) return pathToFolder = Paths.get(folderFullName);
-        return null;
+        return pathToFolder = Paths.get(getFolderFullName());
     }
 
     // require "projectFullName"
     public Path getProjectPath() {
         if (pathToProject != null) return pathToProject;
-        if (!projectFullName.isEmpty()) return pathToProject = Paths.get(projectFullName);
-        return null;
+        return pathToProject = Paths.get(getProjectFullName());
+    }
+
+    // require projectTestName, folderFullName
+    public Path getProjectTestPath() {
+        if (pathToProjectTest != null) return pathToProjectTest;
+        return pathToProjectTest = getProjectTestFile().toPath();
+    }
+
+    // require folderFullName
+    public String getFolderFullName() {
+        if (normalizeFolderFullName != null) return normalizeFolderFullName;
+        if (folderFullName.isEmpty()) throw new NullPointerException("Argument folderFullName should not be empty");
+        return normalizeFolderFullName = new String(
+                folderFullName.getBytes(StandardCharsets.ISO_8859_1),
+                StandardCharsets.UTF_8);
+    }
+
+    // require projectFullName
+    public String getProjectFullName() {
+        if (normalizeProjectFullName != null) return normalizeProjectFullName;
+        if (projectFullName.isEmpty()) throw new NullPointerException("Argument projectFullName should not be empty");
+        return normalizeProjectFullName = new String(
+                projectFullName.getBytes(StandardCharsets.ISO_8859_1),
+                StandardCharsets.UTF_8);
+    }
+
+    // require projectTestName, folderFullName
+    public String getProjectTestFullName() {
+        if (normalizeProjectTestFullName != null) return normalizeProjectTestFullName;
+        return normalizeProjectTestFullName = getProjectTestFile().getAbsolutePath();
+    }
+
+    // require projectTestName
+    public String getProjectTestName() {
+        if (projectTestName.isEmpty()) throw new NullPointerException("Argument projectTestName should not be empty");
+        return projectTestName;
     }
 
     // require "projectFullName"
     public String getProjectName() {
-        if (projectFullName.isEmpty()) return null;
         return getProjectFile().getName();
     }
 
     // require "filesToBeUpdated"
-    public String getFilesToBeUpdated() {
-        if (!filesToBeUpdated.isEmpty())
-            return filesToBeUpdated.stream()
-                    .map(filename -> filename + " ")
-                    .collect(Collectors.joining());
-        return null;
+    public List<String> getFilesToBeUpdated() {
+        if (filesToBeUpdated.isEmpty()) throw new NullPointerException("Argument filesToBeUpdated should not be empty");
+        return filesToBeUpdated;
+    }
+
+    public static GradleOptions getGradleOptions(String... args) {
+        final OptionsParser parser = OptionsParser.newOptionsParser(GradleOptions.class);
+        parser.parseAndExitUponError(args);
+        return parser.getOptions(GradleOptions.class);
     }
 }

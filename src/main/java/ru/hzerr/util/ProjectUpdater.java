@@ -1,21 +1,29 @@
 package ru.hzerr.util;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import ru.hzerr.GradleOptions;
 import ru.hzerr.HLogger;
-import ru.hzerr.Helper;
 
-import java.io.IOException;
+import java.io.File;
 
 public class ProjectUpdater {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        update(Helper.parse(args));
+    public static void main(String[] args) {
+        update(GradleOptions.getGradleOptions(args));
     }
 
-    public static void update(GradleOptions options) throws IOException, InterruptedException {
-        String command = "cd " + options.folderFullName + " & jar uf " + options.projectTestName + " " + options.getFilesToBeUpdated();
-        HLogger.info("Update command: " + command);
-        if (Helper.startNewProcessBuilderWithCmdExe(command)) HLogger.success("The project has been successfully updated");
-        else HLogger.warning("The update of the project ended with an error");
+    public static void update(GradleOptions options) {
+        ZipFile projectTestZip = new ZipFile(options.getProjectTestFile());
+        try {
+            for (String name : options.getFilesToBeUpdated()) {
+                File file = new File(options.getFolderFile(), name);
+                if (file.isDirectory()) projectTestZip.addFolder(file);
+                else projectTestZip.addFile(file);
+            }
+            HLogger.success("The project has been successfully updated");
+        } catch (ZipException e) {
+            HLogger.error("The update of the project ended with an error", e);
+        }
     }
 }

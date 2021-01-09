@@ -1,22 +1,22 @@
 package ru.hzerr.util;
 
+import org.apache.commons.io.FileUtils;
 import ru.hzerr.GradleOptions;
 import ru.hzerr.HLogger;
-import ru.hzerr.Helper;
 
 import java.io.*;
 
 public class ManifestChanger {
 
-    public static void main(String[] args) throws IOException { change(Helper.parse(args)); }
+    public static void main(String[] args) throws IOException { change(GradleOptions.getGradleOptions(args)); }
 
     public static void change(GradleOptions options) throws IOException {
-        File META_INF = new File(options.folderFullName + File.separator + "META-INF");
-        File MANIFEST = new File(META_INF.getAbsolutePath() + File.separator + "MANIFEST.MF");
-        File RSA_FILE = new File(META_INF.getAbsolutePath() + File.separator + "LAUNCHER.RSA");
-        File SF_FILE  = new File(META_INF.getAbsolutePath() + File.separator + "LAUNCHER.SF");
-        if (RSA_FILE.exists()) RSA_FILE.deleteOnExit();
-        if (SF_FILE.exists()) SF_FILE.deleteOnExit();
+        File META_INF = new File(options.getFolderFile(), "META-INF");
+        File MANIFEST = new File(META_INF, "MANIFEST.MF");
+        File RSA_FILE = new File(META_INF, "LAUNCHER.RSA");
+        File SF_FILE  = new File(META_INF, "LAUNCHER.SF");
+        if (RSA_FILE.exists()) FileUtils.forceDelete(RSA_FILE);
+        if (SF_FILE.exists()) FileUtils.forceDelete(SF_FILE);
         StringBuilder attributes;
         try (BufferedReader reader = new BufferedReader(new FileReader(MANIFEST))) {
             attributes = reader.lines().

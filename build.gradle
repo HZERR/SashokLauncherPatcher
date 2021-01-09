@@ -13,6 +13,7 @@ dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
     compile 'com.github.pcj:google-options:1.0.0'
     compile group: 'org.fusesource.jansi', name: 'jansi', version: '2.1.1'
+    compile group: 'net.lingala.zip4j', name: 'zip4j', version: '2.6.4'
 }
 
 task Unpack(type: JavaExec) {
@@ -55,9 +56,10 @@ task Transform(type: JavaExec) {
             "--io.helper.class.name=" + findProperty("io.helper.class.name"),
             "--launcher.class.name=" + findProperty("launcher.class.name"),
             "--log.helper.class.name=" + findProperty("log.helper.class.name"),
-            "--debug.enabled=" + findProperty("debug.enabled"),
+            "--debug.force.enabled=" + findProperty("debug.force.enabled"),
             "--launcher.name=" + findProperty("launcher.name"),
-            "--launcher.version=" + findProperty("launcher.version"))
+            "--launcher.version=" + findProperty("launcher.version"),
+            "--launcher.build=" + findProperty("launcher.build"))
 }
 
 task ChangeManifest(type: JavaExec) {
@@ -126,30 +128,66 @@ task AddJFoenixLibrary(type: JavaExec) {
 }
 
 task UpdateRuntimeFolderAndRun {
-    group = "group modifications"
+    group = "modifications group"
     dependsOn ordered(":UpdateRuntimeFolder", ":Start")
 }
 
 task UpdateLauncherFolderAndRun {
-    group = "group modifications"
+    group = "modifications group"
     dependsOn ordered(":UpdateLauncherFolder", ":Start")
 }
 
 task UnpackChangeAllBuildUpdateAndRun {
-    group = "group modifications"
+    group = "modifications group"
     dependsOn ordered(":Unpack", ":Transform", ":ChangeManifest", ":Build", ":UpdateProject", ":Start")
 }
 
 task Rebuild {
-    group = "group modifications"
+    group = "modifications group"
     description = "Clears the old built project, builds a new one, updates it and runs it"
     dependsOn ordered(":CleanTestProject", ":Build", ":UpdateProject", ":Start")
 }
 
 task TransformAndRun {
-    group = "group modifications"
+    group = "modifications group"
     description = "Changes the bytecode of the classes and runs the jar file with the updated \"launcher\" folder"
     dependsOn ordered(":Transform", ":UpdateLauncherFolder", ":Start")
+}
+
+task TransformMythicalWorldProject(type: JavaExec) {
+    group = "modification projects"
+    description = "Changes the bytecode of the classes"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.Transformator"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.full.name=" + findProperty("project.full.name"),
+            "--security.helper.class.name=" + findProperty("mythical.world.security.helper.class.name"),
+            "--client.launcher.class.name=" + findProperty("mythical.world.client.launcher.class.name"),
+            "--io.helper.class.name=" + findProperty("mythical.world.io.helper.class.name"),
+            "--launcher.class.name=" + findProperty("mythical.world.launcher.class.name"),
+            "--log.helper.class.name=" + findProperty("mythical.world.log.helper.class.name"),
+            "--debug.force.enabled=" + findProperty("debug.force.enabled"),
+            "--launcher.name=" + findProperty("launcher.name"),
+            "--launcher.version=" + findProperty("launcher.version"),
+            "--launcher.build=" + findProperty("launcher.build"))
+}
+
+task TransformMcSkillProject(type: JavaExec) {
+    group = "modification projects"
+    description = "Changes the bytecode of the classes"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.Transformator"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.full.name=" + findProperty("project.full.name"),
+            "--security.helper.class.name=" + findProperty("mc.skill.security.helper.class.name"),
+            "--client.launcher.class.name=" + findProperty("mc.skill.client.launcher.class.name"),
+            "--io.helper.class.name=" + findProperty("mc.skill.io.helper.class.name"),
+            "--launcher.class.name=" + findProperty("mc.skill.launcher.class.name"),
+            "--log.helper.class.name=" + findProperty("mc.skill.log.helper.class.name"),
+            "--debug.force.enabled=" + findProperty("debug.force.enabled"),
+            "--launcher.name=" + findProperty("launcher.name"),
+            "--launcher.version=" + findProperty("launcher.version"),
+            "--launcher.build=" + findProperty("launcher.build"))
 }
 
 def ordered(String... dependencyPaths) {
