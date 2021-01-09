@@ -127,6 +127,15 @@ task AddJFoenixLibrary(type: JavaExec) {
             "--project.test.name=" + findProperty("project.test.name"))
 }
 
+task RemoveJFoenixLibrary(type: JavaExec) {
+    group = "modifications"
+    description = "Remove the JFoenix-8.0.10 library to the assembled jar file"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ru.hzerr.util.JFoenixCleaner"
+    args("--folder.full.name=" + findProperty("folder.full.name"),
+            "--project.test.name=" + findProperty("project.test.name"))
+}
+
 task UpdateRuntimeFolderAndRun {
     group = "modifications group"
     dependsOn ordered(":UpdateRuntimeFolder", ":Start")
