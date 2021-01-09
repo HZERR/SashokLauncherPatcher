@@ -1,9 +1,6 @@
 # SashokLauncherPatcher
 Patcher of launchers that are based on the Sashok274 launcher.
 
-
-## WARNING!!! Работает только под Windows!!!
-
 ### Начало:
 1. Необходимо создать пустую папку, в которой будет происходить вся "магия"
 2. Скопировать в созданную папку jar-файл проекта, который необходимо пропатчить
@@ -14,10 +11,8 @@ Patcher of launchers that are based on the Sashok274 launcher.
 1. Запустить в build.gradle Unpack task
 2. Запустить ChangeManifest task
 3. Запустить Transform task
-4. Запустить Build task (см. вывод в консоль!)
-5. Если какие-то папки не были добавлены в jar-файл, то 
-    * Запускаем UpdateProject task
-6. Запустить Start task
+4. Запустить Build task
+5. Запустить Start task
 
 <b> Готово </b>
 

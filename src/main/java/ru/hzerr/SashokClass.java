@@ -6,5 +6,5 @@ public abstract class SashokClass {
 
     public abstract ByteCodeBuilder transform(GradleOptions options);
 
-    public void doTransform(GradleOptions options) { transform(options).writeFile(options.folderFullName); }
+    public void doTransform(GradleOptions options) { transform(options).writeFile(options.getFolderFullName()); }
 }
